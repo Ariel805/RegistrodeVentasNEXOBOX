@@ -368,7 +368,7 @@
 
 <script>
     // --- 1. PEGA TU URL DE APPS SCRIPT AQUÍ ---
-    const APPS_SCRIPT_URL = "https://script.google.com/macros/s/AKfycbwkSWVeW8ghCQtBokY6eJP7RtM3NMHzP45iLHkB0eaNQrDstel_Y1FkaEr-uPnSs_f1/exec";
+    const APPS_SCRIPT_URL = "https://script.google.com/macros/s/AKfycbxFacYNdgxB1prHum0D73mtq_rv94e-9ZUbG5HU2ndUhd8NAZ_dK7ZUCaAP8DgSbvcO/exec";
     
     // --- LÓGICA DE TEMA (CLARO/OSCURO) ---
     function toggleTheme() {
@@ -447,13 +447,6 @@
             let fechaVenta = new Date(document.getElementById('fecha').value);
             fechaVenta.setDate(fechaVenta.getDate() + parseInt(duracion));
             vencimiento = fechaVenta.toISOString().split('T')[0];
-            
-            guardarSuscripcionLocal({
-                cliente: document.getElementById('cliente').value,
-                telefono: document.getElementById('telefono').value,
-                servicio: subcategoria,
-                vencimiento: vencimiento
-            });
         }
 
         ultimaVenta = {
@@ -559,48 +552,56 @@
         }
 
         doc.setFontSize(10);
+        doc.setFont("helvetica", "italic");
+        doc.setTextColor(170, 170, 170);
+        doc.text("Este documento no es una factura oficial y no tiene valor legal.", 105, 268, null, null, "center");
+
         doc.setFont("helvetica", "normal");
         doc.setTextColor(100, 100, 100);
-        doc.text("¡Gracias por tu preferencia! Soporte y garantías en NexoBox Store.", 105, 270, null, null, "center");
+        doc.text("¡Gracias por tu preferencia! Soporte y garantías en NexoBox Store.", 105, 280, null, null, "center");
 
         doc.save(`NexoBox_${ultimaVenta.cliente}_${ultimaVenta.fecha}.pdf`);
     }
 
-    // --- LÓGICA DE ALERTAS LOCALES ---
-    function guardarSuscripcionLocal(datos) {
-        let subs = JSON.parse(localStorage.getItem('nexobox_subs')) || [];
-        subs.push(datos);
-        localStorage.setItem('nexobox_subs', JSON.stringify(subs));
-    }
-
+    // --- LÓGICA DE ALERTAS DESDE GOOGLE SHEETS ---
     function loadAlerts() {
         const container = document.getElementById('alertsContainer');
-        container.innerHTML = "";
-        let subs = JSON.parse(localStorage.getItem('nexobox_subs')) || [];
-        let hoy = new Date();
-        let encontradas = 0;
+        container.innerHTML = "<p style='color: var(--text-muted); text-align: center;'>Cargando base de datos...</p>";
 
-        subs.forEach(sub => {
-            let fechaVenc = new Date(sub.vencimiento);
-            let difTiempo = fechaVenc.getTime() - hoy.getTime();
-            let difDias = Math.ceil(difTiempo / (1000 * 3600 * 24));
+        fetch(APPS_SCRIPT_URL)
+            .then(response => response.json())
+            .then(subs => {
+                container.innerHTML = "";
+                let hoy = new Date();
+                let encontradas = 0;
 
-            if (difDias <= 5 && difDias >= -30) {
-                encontradas++;
-                let estado = difDias < 0 ? `¡Venció hace ${Math.abs(difDias)} días!` : `Vence en ${difDias} días`;
-                container.innerHTML += `
-                    <div class="alert-card">
-                        <h4>${sub.cliente} - ${sub.servicio}</h4>
-                        <p>Tel: ${sub.telefono} | <strong>${estado}</strong> (Caducidad: ${sub.vencimiento})</p>
-                        <a href="https://wa.me/591${sub.telefono}" class="whatsapp-link" target="_blank">Enviar recordatorio por WhatsApp -></a>
-                    </div>
-                `;
-            }
-        });
+                subs.forEach(sub => {
+                    let fechaVenc = new Date(sub.vencimiento);
+                    fechaVenc.setMinutes(fechaVenc.getMinutes() + fechaVenc.getTimezoneOffset());
+                    
+                    let difTiempo = fechaVenc.getTime() - hoy.getTime();
+                    let difDias = Math.ceil(difTiempo / (1000 * 3600 * 24));
 
-        if (encontradas === 0) {
-            container.innerHTML = "<p style='color: var(--text-muted); text-align: center; padding: 20px;'>Todo en orden. No hay vencimientos cercanos.</p>";
-        }
+                    if (difDias <= 5 && difDias >= -30) {
+                        encontradas++;
+                        let estado = difDias < 0 ? `¡Venció hace ${Math.abs(difDias)} días!` : `Vence en ${difDias} días`;
+                        container.innerHTML += `
+                            <div class="alert-card">
+                                <h4>${sub.cliente} - ${sub.servicio}</h4>
+                                <p>Tel: ${sub.telefono} | <strong>${estado}</strong> (Caducidad: ${sub.vencimiento})</p>
+                                <a href="https://wa.me/591${sub.telefono}" class="whatsapp-link" target="_blank">Enviar recordatorio por WhatsApp -></a>
+                            </div>
+                        `;
+                    }
+                });
+
+                if (encontradas === 0) {
+                    container.innerHTML = "<p style='color: var(--text-muted); text-align: center; padding: 20px;'>Todo en orden. No hay vencimientos cercanos.</p>";
+                }
+            })
+            .catch(err => {
+                container.innerHTML = "<p style='color: var(--alert-red); text-align: center;'>Error al conectar con la base de datos.</p>";
+            });
     }
 </script>
 
