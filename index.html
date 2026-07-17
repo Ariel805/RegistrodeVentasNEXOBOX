@@ -1,0 +1,608 @@
+<!DOCTYPE html>
+<html lang="es" data-theme="dark">
+<head>
+    <meta charset="UTF-8">
+    <meta name="viewport" content="width=device-width, initial-scale=1.0">
+    <title>NexoBox Store - Registro de Ventas</title>
+    <!-- Librería para generar PDF -->
+    <script src="https://cdnjs.cloudflare.com/ajax/libs/jspdf/2.5.1/jspdf.umd.min.js"></script>
+    <!-- Fuente Moderna (Poppins) -->
+    <link href="https://fonts.googleapis.com/css2?family=Poppins:wght@300;400;600&display=swap" rel="stylesheet">
+    <style>
+        /* Variables de colores para los temas */
+        :root {
+            --bg-color: #121212;
+            --surface-color: #1e1e1e;
+            --border-color: #333333;
+            --text-main: #ffffff;
+            --text-muted: #aaaaaa;
+            --accent: #ffffff;
+            --accent-hover: #cccccc;
+            --btn-text: #000000;
+            --alert-red: #ff4c4c;
+            --shadow: 0 10px 30px rgba(0,0,0,0.5);
+        }
+
+        [data-theme="light"] {
+            --bg-color: #f0f2f5;
+            --surface-color: #ffffff;
+            --border-color: #dddddd;
+            --text-main: #1a1a1a;
+            --text-muted: #666666;
+            --accent: #1a1a1a;
+            --accent-hover: #444444;
+            --btn-text: #ffffff;
+            --shadow: 0 10px 30px rgba(0,0,0,0.1);
+        }
+
+        /* Estilos Base y Animaciones Globales */
+        body {
+            font-family: 'Poppins', sans-serif;
+            background-color: var(--bg-color);
+            color: var(--text-main);
+            margin: 0;
+            padding: 20px;
+            transition: background-color 0.4s ease, color 0.4s ease;
+        }
+
+        .container {
+            max-width: 650px;
+            margin: 0 auto;
+            position: relative;
+        }
+
+        /* Botón de Cambio de Tema */
+        .theme-toggle {
+            position: absolute;
+            top: 0;
+            right: 0;
+            background: var(--surface-color);
+            border: 1px solid var(--border-color);
+            color: var(--text-main);
+            padding: 8px 15px;
+            border-radius: 20px;
+            cursor: pointer;
+            font-family: 'Poppins', sans-serif;
+            font-weight: 600;
+            transition: all 0.3s ease;
+            box-shadow: var(--shadow);
+        }
+        .theme-toggle:hover {
+            transform: scale(1.05);
+        }
+
+        header {
+            text-align: center;
+            margin-bottom: 30px;
+            padding-top: 20px;
+            animation: fadeInDown 0.8s ease;
+        }
+        
+        .logo {
+            max-width: 140px;
+            margin-bottom: 5px;
+            transition: transform 0.3s ease;
+        }
+        .logo:hover {
+            transform: scale(1.05);
+        }
+
+        h2 { margin-top: 0; font-weight: 600; letter-spacing: 1px; }
+
+        /* Pestañas (Maquetación sin Flexbox/Grid) */
+        .tabs {
+            text-align: center;
+            margin-bottom: 25px;
+            animation: fadeIn 1s ease;
+        }
+        .tab-btn {
+            display: inline-block;
+            width: 48%;
+            box-sizing: border-box;
+            padding: 12px;
+            background: var(--surface-color);
+            color: var(--text-main);
+            border: 1px solid var(--border-color);
+            border-radius: 8px;
+            cursor: pointer;
+            font-weight: 600;
+            font-family: 'Poppins', sans-serif;
+            transition: all 0.3s ease;
+            margin: 0 0.5%;
+        }
+        .tab-btn:hover { background: var(--border-color); }
+        .tab-btn.active {
+            background: var(--accent);
+            color: var(--btn-text);
+            border-color: var(--accent);
+            transform: translateY(-2px);
+            box-shadow: 0 4px 10px rgba(0,0,0,0.2);
+        }
+
+        /* Paneles y Formularios */
+        .panel {
+            display: none;
+            background: var(--surface-color);
+            padding: 30px;
+            border-radius: 12px;
+            border: 1px solid var(--border-color);
+            box-shadow: var(--shadow);
+            transition: background-color 0.4s ease;
+        }
+        .panel.active {
+            display: block;
+            animation: slideUp 0.5s ease;
+        }
+
+        .form-group { margin-bottom: 20px; }
+        
+        label {
+            display: block;
+            margin-bottom: 8px;
+            font-size: 0.9em;
+            color: var(--text-muted);
+            font-weight: 600;
+            transition: color 0.4s ease;
+        }
+
+        input, select {
+            width: 100%;
+            padding: 12px;
+            box-sizing: border-box;
+            background: var(--bg-color);
+            border: 1px solid var(--border-color);
+            color: var(--text-main);
+            border-radius: 6px;
+            font-family: 'Poppins', sans-serif;
+            font-size: 0.95em;
+            transition: all 0.3s ease;
+        }
+        input:focus, select:focus {
+            outline: none;
+            border-color: var(--accent);
+            box-shadow: 0 0 0 2px rgba(255, 255, 255, 0.1);
+        }
+
+        .btn-submit {
+            display: block;
+            width: 100%;
+            padding: 15px;
+            background: var(--accent);
+            color: var(--btn-text);
+            border: none;
+            border-radius: 6px;
+            font-weight: 600;
+            font-family: 'Poppins', sans-serif;
+            font-size: 1.05em;
+            cursor: pointer;
+            margin-top: 20px;
+            transition: all 0.3s ease;
+            text-transform: uppercase;
+            letter-spacing: 1px;
+        }
+        .btn-submit:hover {
+            background: var(--accent-hover);
+            transform: translateY(-2px);
+            box-shadow: 0 5px 15px rgba(0,0,0,0.3);
+        }
+        .btn-pdf {
+            background: transparent;
+            color: var(--accent);
+            border: 2px solid var(--accent);
+            margin-top: 15px;
+        }
+        .btn-pdf:hover {
+            background: var(--accent);
+            color: var(--btn-text);
+        }
+
+        .dynamic-field { display: none; }
+        
+        /* Alertas */
+        .alert-card {
+            background: rgba(255, 76, 76, 0.1);
+            border-left: 5px solid var(--alert-red);
+            padding: 15px 20px;
+            margin-bottom: 15px;
+            border-radius: 6px;
+            transition: transform 0.2s ease;
+        }
+        .alert-card:hover { transform: translateX(5px); }
+        .alert-card h4 { margin: 0 0 8px 0; font-weight: 600; }
+        .alert-card p { margin: 0; font-size: 0.9em; color: var(--text-main); }
+        .whatsapp-link {
+            display: inline-block;
+            margin-top: 8px;
+            color: #4CAF50;
+            text-decoration: none;
+            font-weight: 600;
+        }
+
+        #successModal {
+            display: none;
+            text-align: center;
+            padding: 30px;
+            border: 2px solid #4CAF50;
+            background: rgba(76, 175, 80, 0.05);
+            border-radius: 12px;
+            margin-bottom: 20px;
+            animation: zoomIn 0.5s ease;
+        }
+
+        /* Animaciones (Keyframes) */
+        @keyframes fadeIn { from { opacity: 0; } to { opacity: 1; } }
+        @keyframes fadeInDown { from { opacity: 0; transform: translateY(-20px); } to { opacity: 1; transform: translateY(0); } }
+        @keyframes slideUp { from { opacity: 0; transform: translateY(20px); } to { opacity: 1; transform: translateY(0); } }
+        @keyframes zoomIn { from { opacity: 0; transform: scale(0.9); } to { opacity: 1; transform: scale(1); } }
+    </style>
+</head>
+<body>
+
+<div class="container">
+    <button class="theme-toggle" onclick="toggleTheme()">☀️ Modo Claro</button>
+
+    <header>
+        <!-- Puedes mantener tu logo claro, el fondo oscuro por defecto lo hará resaltar -->
+        <img src="logo-claro.png" alt="NexoBox Store" class="logo" onerror="this.style.display='none'">
+        <h2>NexoBox Store</h2>
+    </header>
+
+    <div class="tabs">
+        <button class="tab-btn active" onclick="switchTab('registro', this)">Registrar Venta</button>
+        <button class="tab-btn" onclick="switchTab('alertas', this); loadAlerts();">Alertas Renovación</button>
+    </div>
+
+    <!-- PESTAÑA: REGISTRO -->
+    <div id="registro" class="panel active">
+        <div id="successModal">
+            <h3 style="color: #4CAF50; font-size: 1.5em; margin-top: 0;">¡Venta Exitosa!</h3>
+            <p style="color: var(--text-muted);">Los datos han sido guardados en tu base de datos.</p>
+            <button class="btn-submit btn-pdf" onclick="descargarPDF()">Descargar Extracto PDF</button>
+            <button class="btn-submit" style="background: var(--border-color); color: var(--text-main);" onclick="resetForm()">Registrar Nueva Venta</button>
+        </div>
+
+        <form id="salesForm">
+            <div class="form-group">
+                <label>Fecha de Venta</label>
+                <input type="date" id="fecha" required>
+            </div>
+
+            <div class="form-group">
+                <label>Categoría</label>
+                <select id="categoria" required onchange="handleCategoryChange()">
+                    <option value="">Selecciona una categoría...</option>
+                    <option value="PC">PC</option>
+                    <option value="PS4">PS4</option>
+                    <option value="PS5">PS5</option>
+                    <option value="Suscripcion">Suscripción</option>
+                    <option value="Credito">Crédito de Plataforma</option>
+                </select>
+            </div>
+
+            <!-- Campos Dinámicos -->
+            <div id="group-ps" class="form-group dynamic-field">
+                <label>Tipo de Cuenta (PS4/PS5)</label>
+                <select id="tipo_cuenta">
+                    <option value="Cuenta Principal">Cuenta Principal</option>
+                    <option value="Cuenta Secundaria">Cuenta Secundaria</option>
+                    <option value="Cuenta Unitaria">Cuenta Unitaria</option>
+                </select>
+            </div>
+
+            <div id="group-suscripcion" class="form-group dynamic-field">
+                <label>Tipo de Suscripción</label>
+                <select id="tipo_suscripcion">
+                    <option value="Plataforma">Plataforma</option>
+                    <option value="Streaming">Servicio Streaming (Ej. Netflix)</option>
+                    <option value="PS Plus">PS Plus</option>
+                    <option value="Game Pass PC">Game Pass PC</option>
+                </select>
+            </div>
+
+            <div id="group-credito" class="form-group dynamic-field">
+                <label>Plataforma de Crédito</label>
+                <select id="plataforma_credito">
+                    <option value="PSN">PSN</option>
+                    <option value="STEAM">STEAM</option>
+                </select>
+                <label style="margin-top: 15px;">Monto del Crédito (Ej. $20)</label>
+                <input type="text" id="monto_credito_desc" placeholder="Ej. Tarjeta de 20 USD">
+            </div>
+
+            <div id="group-credenciales" class="form-group dynamic-field">
+                <label>Correo de la Cuenta</label>
+                <input type="email" id="correo_cuenta" placeholder="correo@ejemplo.com">
+                
+                <label style="margin-top: 15px;">Contraseña de la Cuenta</label>
+                <input type="text" id="password_cuenta" placeholder="Contraseña de acceso">
+            </div>
+
+            <!-- Campos Comunes -->
+            <div id="common-fields" style="display: none;">
+                
+                <!-- NUEVO CAMPO AÑADIDO -->
+                <div class="form-group">
+                    <label>Nombre del Juego o Servicio</label>
+                    <input type="text" id="nombre_item" placeholder="Ej. FIFA 24, Netflix Premium, God of War" required>
+                </div>
+                <!-- FIN DEL NUEVO CAMPO -->
+
+                <div class="form-group">
+                    <label>Cliente (Nombre)</label>
+                    <input type="text" id="cliente" placeholder="Nombre completo" required>
+                </div>
+                <div class="form-group">
+                    <label>Teléfono (WhatsApp)</label>
+                    <input type="tel" id="telefono" placeholder="Ej. 71234567" required>
+                </div>
+                <div class="form-group">
+                    <label>Monto Total Cobrado (Bs o $)</label>
+                    <input type="number" id="monto" step="0.01" placeholder="0.00" required>
+                </div>
+                <div class="form-group">
+                    <label>Ganancia (Precio Agregado)</label>
+                    <input type="number" id="ganancia" step="0.01" placeholder="0.00" required>
+                </div>
+                
+                <div id="group-duracion" class="form-group dynamic-field">
+                    <label>Duración del Servicio (en días)</label>
+                    <input type="number" id="duracion" placeholder="Ej. 30">
+                </div>
+
+                <button type="submit" class="btn-submit" id="btnSubmit">Procesar Venta</button>
+            </div>
+        </form>
+    </div>
+
+    <!-- PESTAÑA: ALERTAS -->
+    <div id="alertas" class="panel">
+        <h3 style="margin-top:0;">Próximos Vencimientos</h3>
+        <p style="font-size: 0.9em; color: var(--text-muted); margin-bottom: 20px;">
+            Suscripciones que vencen en los próximos 5 días.
+        </p>
+        <div id="alertsContainer">
+            <!-- Las alertas se cargarán aquí -->
+        </div>
+    </div>
+</div>
+
+<script>
+    // --- 1. PEGA TU URL DE APPS SCRIPT AQUÍ ---
+    const APPS_SCRIPT_URL = "https://script.google.com/macros/s/AKfycbwkSWVeW8ghCQtBokY6eJP7RtM3NMHzP45iLHkB0eaNQrDstel_Y1FkaEr-uPnSs_f1/exec";
+    
+    // --- LÓGICA DE TEMA (CLARO/OSCURO) ---
+    function toggleTheme() {
+        const html = document.documentElement;
+        const btn = document.querySelector('.theme-toggle');
+        if (html.getAttribute('data-theme') === 'dark') {
+            html.setAttribute('data-theme', 'light');
+            btn.innerText = '🌙 Modo Oscuro';
+        } else {
+            html.setAttribute('data-theme', 'dark');
+            btn.innerText = '☀️ Modo Claro';
+        }
+    }
+    
+
+    // Poner fecha de hoy por defecto
+    document.getElementById('fecha').valueAsDate = new Date();
+
+    let ultimaVenta = {}; 
+
+    function switchTab(tabId, btnElement) {
+        document.querySelectorAll('.panel').forEach(p => p.classList.remove('active'));
+        document.querySelectorAll('.tab-btn').forEach(b => b.classList.remove('active'));
+        document.getElementById(tabId).classList.add('active');
+        btnElement.classList.add('active');
+    }
+
+    function handleCategoryChange() {
+        const cat = document.getElementById('categoria').value;
+        const dynamics = document.querySelectorAll('.dynamic-field');
+        dynamics.forEach(el => el.style.display = 'none');
+        
+        if(cat) {
+            document.getElementById('common-fields').style.display = 'block';
+        } else {
+            document.getElementById('common-fields').style.display = 'none';
+        }
+
+        if (cat === 'PS4' || cat === 'PS5') {
+            document.getElementById('group-ps').style.display = 'block';
+            document.getElementById('group-ps').style.animation = 'fadeIn 0.5s ease';
+        }
+        if (cat === 'Suscripcion') {
+            document.getElementById('group-suscripcion').style.display = 'block';
+            document.getElementById('group-duracion').style.display = 'block';
+            document.getElementById('group-suscripcion').style.animation = 'fadeIn 0.5s ease';
+            document.getElementById('group-duracion').style.animation = 'fadeIn 0.5s ease';
+        }
+        if (cat === 'Credito') {
+            document.getElementById('group-credito').style.display = 'block';
+            document.getElementById('group-credito').style.animation = 'fadeIn 0.5s ease';
+        }
+
+        if (cat === 'PS4' || cat === 'PS5' || cat === 'Suscripcion') {
+            document.getElementById('group-credenciales').style.display = 'block';
+            document.getElementById('group-credenciales').style.animation = 'fadeIn 0.5s ease';
+        }
+    }
+
+    document.getElementById('salesForm').addEventListener('submit', function(e) {
+        e.preventDefault();
+        const btn = document.getElementById('btnSubmit');
+        btn.innerText = "Registrando...";
+        btn.disabled = true;
+
+        const cat = document.getElementById('categoria').value;
+        let subcategoria = "N/A";
+        let duracion = document.getElementById('duracion').value || "";
+        let vencimiento = "";
+
+        if (cat === 'PS4' || cat === 'PS5') subcategoria = document.getElementById('tipo_cuenta').value;
+        if (cat === 'Suscripcion') subcategoria = document.getElementById('tipo_suscripcion').value;
+        if (cat === 'Credito') subcategoria = document.getElementById('plataforma_credito').value + " - " + document.getElementById('monto_credito_desc').value;
+
+        if (cat === 'Suscripcion' && duracion) {
+            let fechaVenta = new Date(document.getElementById('fecha').value);
+            fechaVenta.setDate(fechaVenta.getDate() + parseInt(duracion));
+            vencimiento = fechaVenta.toISOString().split('T')[0];
+            
+            guardarSuscripcionLocal({
+                cliente: document.getElementById('cliente').value,
+                telefono: document.getElementById('telefono').value,
+                servicio: subcategoria,
+                vencimiento: vencimiento
+            });
+        }
+
+        ultimaVenta = {
+            fecha: document.getElementById('fecha').value,
+            categoria: cat,
+            subcategoria: subcategoria,
+            nombre_item: document.getElementById('nombre_item').value,
+            correo_cuenta: document.getElementById('correo_cuenta').value,
+            password_cuenta: document.getElementById('password_cuenta').value,
+            cliente: document.getElementById('cliente').value,
+            telefono: document.getElementById('telefono').value,
+            monto: document.getElementById('monto').value,
+            ganancia: document.getElementById('ganancia').value,
+            duracion: duracion,
+            vencimiento: vencimiento
+        };
+
+        const formData = new URLSearchParams(ultimaVenta);
+
+        fetch(APPS_SCRIPT_URL, {
+            method: 'POST',
+            body: formData,
+            mode: 'no-cors'
+        })
+        .then(() => {
+            document.getElementById('salesForm').style.display = 'none';
+            document.getElementById('successModal').style.display = 'block';
+        })
+        .catch(err => alert("Error de conexión"))
+        .finally(() => {
+            btn.innerText = "Procesar Venta";
+            btn.disabled = false;
+        });
+    });
+
+    function resetForm() {
+        document.getElementById('salesForm').reset();
+        document.getElementById('fecha').valueAsDate = new Date();
+        document.getElementById('salesForm').style.display = 'block';
+        document.getElementById('successModal').style.display = 'none';
+        handleCategoryChange();
+    }
+
+    // --- LÓGICA DE PDF ---
+    function descargarPDF() {
+        const { jsPDF } = window.jspdf;
+        const doc = new jsPDF();
+        
+        doc.setFillColor(18, 18, 18);
+        doc.rect(0, 0, 210, 297, 'F');
+        
+        doc.setTextColor(255, 255, 255);
+        doc.setFontSize(24);
+        doc.setFont("helvetica", "bold");
+        doc.text("NexoBox Store", 105, 30, null, null, "center");
+        
+        doc.setFontSize(12);
+        doc.setFont("helvetica", "normal");
+        doc.setTextColor(170, 170, 170);
+        doc.text("RECIBO DE COMPRA DIGITAL", 105, 40, null, null, "center");
+        
+        doc.setDrawColor(51, 51, 51);
+        doc.line(20, 50, 190, 50);
+
+        doc.setTextColor(255, 255, 255);
+        let y = 70;
+        const lineSpacing = 12;
+
+        doc.text(`Fecha de Transacción: ${ultimaVenta.fecha}`, 20, y); y += lineSpacing;
+        doc.text(`Cliente: ${ultimaVenta.cliente}`, 20, y); y += lineSpacing;
+        doc.text(`Teléfono de Contacto: ${ultimaVenta.telefono}`, 20, y); y += lineSpacing;
+        doc.text(`Categoría: ${ultimaVenta.categoria}`, 20, y); y += lineSpacing;
+        
+        if(ultimaVenta.subcategoria !== "N/A") {
+            doc.text(`Detalles del Producto: ${ultimaVenta.subcategoria}`, 20, y); y += lineSpacing;
+        }
+        doc.text(`Juego/Servicio: ${ultimaVenta.nombre_item}`, 20, y); y += lineSpacing;
+
+        if (ultimaVenta.correo_cuenta || ultimaVenta.password_cuenta) {
+            y += 5;
+            doc.setFont("helvetica", "bold");
+            doc.text("Datos de Acceso:", 20, y); y += lineSpacing;
+            
+            doc.setFont("helvetica", "normal");
+            if (ultimaVenta.correo_cuenta) {
+                doc.text(`Correo: ${ultimaVenta.correo_cuenta}`, 20, y); y += lineSpacing;
+            }
+            if (ultimaVenta.password_cuenta) {
+                doc.text(`Contraseña: ${ultimaVenta.password_cuenta}`, 20, y); y += lineSpacing;
+            }
+        }
+        
+        doc.setFontSize(16);
+        doc.setFont("helvetica", "bold");
+        y += 10;
+        doc.text(`Total Pagado: ${ultimaVenta.monto}`, 20, y);
+        
+        if(ultimaVenta.vencimiento) {
+            y += 15;
+            doc.setFontSize(12);
+            doc.setTextColor(255, 76, 76);
+            doc.text(`Atención: Este servicio vence el ${ultimaVenta.vencimiento}`, 20, y);
+        }
+
+        doc.setFontSize(10);
+        doc.setFont("helvetica", "normal");
+        doc.setTextColor(100, 100, 100);
+        doc.text("¡Gracias por tu preferencia! Soporte y garantías en NexoBox Store.", 105, 270, null, null, "center");
+
+        doc.save(`NexoBox_${ultimaVenta.cliente}_${ultimaVenta.fecha}.pdf`);
+    }
+
+    // --- LÓGICA DE ALERTAS LOCALES ---
+    function guardarSuscripcionLocal(datos) {
+        let subs = JSON.parse(localStorage.getItem('nexobox_subs')) || [];
+        subs.push(datos);
+        localStorage.setItem('nexobox_subs', JSON.stringify(subs));
+    }
+
+    function loadAlerts() {
+        const container = document.getElementById('alertsContainer');
+        container.innerHTML = "";
+        let subs = JSON.parse(localStorage.getItem('nexobox_subs')) || [];
+        let hoy = new Date();
+        let encontradas = 0;
+
+        subs.forEach(sub => {
+            let fechaVenc = new Date(sub.vencimiento);
+            let difTiempo = fechaVenc.getTime() - hoy.getTime();
+            let difDias = Math.ceil(difTiempo / (1000 * 3600 * 24));
+
+            if (difDias <= 5 && difDias >= -30) {
+                encontradas++;
+                let estado = difDias < 0 ? `¡Venció hace ${Math.abs(difDias)} días!` : `Vence en ${difDias} días`;
+                container.innerHTML += `
+                    <div class="alert-card">
+                        <h4>${sub.cliente} - ${sub.servicio}</h4>
+                        <p>Tel: ${sub.telefono} | <strong>${estado}</strong> (Caducidad: ${sub.vencimiento})</p>
+                        <a href="https://wa.me/591${sub.telefono}" class="whatsapp-link" target="_blank">Enviar recordatorio por WhatsApp -></a>
+                    </div>
+                `;
+            }
+        });
+
+        if (encontradas === 0) {
+            container.innerHTML = "<p style='color: var(--text-muted); text-align: center; padding: 20px;'>Todo en orden. No hay vencimientos cercanos.</p>";
+        }
+    }
+</script>
+
+</body>
+</html>
