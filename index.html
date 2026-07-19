@@ -46,7 +46,7 @@
         }
 
         .container {
-            max-width: 650px;
+            max-width: 1100px;
             margin: 0 auto;
             position: relative;
         }
@@ -97,7 +97,7 @@
         }
         .tab-btn {
             display: inline-block;
-            width: 48%;
+            width: 32%;
             box-sizing: border-box;
             padding: 12px;
             background: var(--surface-color);
@@ -128,6 +128,10 @@
             border: 1px solid var(--border-color);
             box-shadow: var(--shadow);
             transition: background-color 0.4s ease;
+        }
+        .panel.narrow {
+            max-width: 650px;
+            margin: 0 auto;
         }
         .panel.active {
             display: block;
@@ -197,6 +201,168 @@
         }
 
         .dynamic-field { display: none; }
+
+        /* Gestion de registros */
+        .management-header {
+            margin-bottom: 20px;
+        }
+        .management-actions {
+            display: block;
+            margin-bottom: 18px;
+        }
+        .management-actions .form-group {
+            display: inline-block;
+            width: calc(100% - 150px);
+            margin: 0;
+            vertical-align: bottom;
+        }
+        .btn-small {
+            display: inline-block;
+            width: auto;
+            padding: 10px 14px;
+            margin: 0;
+            border-radius: 6px;
+            border: none;
+            font-family: 'Poppins', sans-serif;
+            font-weight: 600;
+            cursor: pointer;
+            transition: all 0.3s ease;
+        }
+        .btn-secondary {
+            background: var(--border-color);
+            color: var(--text-main);
+        }
+        .btn-danger {
+            background: var(--alert-red);
+            color: #ffffff;
+        }
+        .btn-small:hover {
+            transform: translateY(-1px);
+            filter: brightness(1.05);
+        }
+        .records-table-wrap {
+            overflow-x: auto;
+            border: 1px solid var(--border-color);
+            border-radius: 8px;
+        }
+        .records-table {
+            width: 100%;
+            min-width: 1250px;
+            border-collapse: collapse;
+            background: var(--surface-color);
+        }
+        .records-table th,
+        .records-table td {
+            padding: 11px 12px;
+            border-bottom: 1px solid var(--border-color);
+            text-align: left;
+            font-size: 0.86em;
+            vertical-align: middle;
+            white-space: normal;
+            overflow-wrap: anywhere;
+        }
+        .records-table th {
+            color: var(--text-muted);
+            font-weight: 600;
+            background: var(--bg-color);
+            position: sticky;
+            top: 0;
+            z-index: 1;
+            white-space: nowrap;
+        }
+        .records-table tr:last-child td {
+            border-bottom: none;
+        }
+        .record-actions {
+            white-space: nowrap;
+        }
+        .record-actions .btn-small {
+            margin-right: 6px;
+        }
+        .empty-row {
+            color: var(--text-muted);
+            text-align: center !important;
+            padding: 22px !important;
+        }
+        .records-complete-list {
+            display: grid;
+            gap: 14px;
+            margin-top: 20px;
+        }
+        .record-card {
+            border: 1px solid var(--border-color);
+            border-radius: 8px;
+            background: var(--bg-color);
+            padding: 16px;
+        }
+        .record-card-header {
+            display: flex;
+            align-items: center;
+            justify-content: space-between;
+            gap: 12px;
+            margin-bottom: 14px;
+        }
+        .record-card-title {
+            margin: 0;
+            font-size: 1em;
+            font-weight: 600;
+        }
+        .record-detail-grid {
+            display: grid;
+            grid-template-columns: repeat(auto-fit, minmax(180px, 1fr));
+            gap: 12px;
+        }
+        .record-detail-item {
+            min-width: 0;
+        }
+        .record-detail-label {
+            display: block;
+            color: var(--text-muted);
+            font-size: 0.78em;
+            font-weight: 600;
+            margin-bottom: 4px;
+        }
+        .record-detail-value {
+            display: block;
+            color: var(--text-main);
+            font-size: 0.9em;
+            overflow-wrap: anywhere;
+        }
+
+        .modal-backdrop {
+            position: fixed;
+            inset: 0;
+            display: none;
+            align-items: center;
+            justify-content: center;
+            background: rgba(0, 0, 0, 0.65);
+            padding: 20px;
+            z-index: 20;
+        }
+        .modal-backdrop.active {
+            display: flex;
+            animation: fadeIn 0.2s ease;
+        }
+        .modal-content {
+            width: min(720px, 100%);
+            max-height: 90vh;
+            overflow-y: auto;
+            background: var(--surface-color);
+            border: 1px solid var(--border-color);
+            border-radius: 12px;
+            box-shadow: var(--shadow);
+            padding: 26px;
+        }
+        .modal-grid {
+            display: grid;
+            grid-template-columns: repeat(2, minmax(0, 1fr));
+            gap: 0 16px;
+        }
+        .modal-actions {
+            display: grid;
+            grid-template-columns: 1fr 1fr;
+            gap: 12px;
+        }
         
         /* Alertas */
         .alert-card {
@@ -234,6 +400,17 @@
         @keyframes fadeInDown { from { opacity: 0; transform: translateY(-20px); } to { opacity: 1; transform: translateY(0); } }
         @keyframes slideUp { from { opacity: 0; transform: translateY(20px); } to { opacity: 1; transform: translateY(0); } }
         @keyframes zoomIn { from { opacity: 0; transform: scale(0.9); } to { opacity: 1; transform: scale(1); } }
+
+        @media (max-width: 760px) {
+            body { padding: 14px; }
+            .theme-toggle { position: static; display: block; margin-left: auto; margin-bottom: 10px; }
+            .tab-btn { width: 100%; margin: 0 0 8px 0; }
+            .panel { padding: 20px; }
+            .management-actions .form-group { width: 100%; margin-bottom: 12px; }
+            .management-actions .btn-small { width: 100%; }
+            .modal-grid { grid-template-columns: 1fr; }
+            .modal-actions { grid-template-columns: 1fr; }
+        }
     </style>
 </head>
 <body>
@@ -250,10 +427,11 @@
     <div class="tabs">
         <button class="tab-btn active" onclick="switchTab('registro', this)">Registrar Venta</button>
         <button class="tab-btn" onclick="switchTab('alertas', this); loadAlerts();">Alertas Renovación</button>
+        <button class="tab-btn" onclick="switchTab('gestion', this); loadRecords();">Base de Datos</button>
     </div>
 
     <!-- PESTAÑA: REGISTRO -->
-    <div id="registro" class="panel active">
+    <div id="registro" class="panel narrow active">
         <div id="successModal">
             <h3 style="color: #4CAF50; font-size: 1.5em; margin-top: 0;">¡Venta Exitosa!</h3>
             <p style="color: var(--text-muted);">Los datos han sido guardados en tu base de datos.</p>
@@ -286,6 +464,7 @@
                     <option value="Cuenta Principal">Cuenta Principal</option>
                     <option value="Cuenta Secundaria">Cuenta Secundaria</option>
                     <option value="Cuenta Unitaria">Cuenta Unitaria</option>
+                    <option value="Cuenta Personal">Cuenta Personal</option>
                 </select>
             </div>
 
@@ -355,20 +534,136 @@
     </div>
 
     <!-- PESTAÑA: ALERTAS -->
-    <div id="alertas" class="panel">
+    <div id="alertas" class="panel narrow">
         <h3 style="margin-top:0;">Próximos Vencimientos</h3>
         <p style="font-size: 0.9em; color: var(--text-muted); margin-bottom: 20px;">
-            Suscripciones que vencen en los próximos 5 días.
+            Suscripciones que vencen en los próximos 5 días o tienen hasta 2 días de atraso.
         </p>
         <div id="alertsContainer">
             <!-- Las alertas se cargarán aquí -->
+        </div>
+    </div>
+
+    <!-- PESTAÑA: GESTIÓN -->
+    <div id="gestion" class="panel">
+        <div class="management-header">
+            <h3 style="margin-top:0;">Base de Datos</h3>
+            <p style="font-size: 0.9em; color: var(--text-muted); margin-bottom: 0;">
+                Administra altas, bajas y modificaciones usando la fila de Google Sheets como ID.
+            </p>
+        </div>
+
+        <div class="management-actions">
+            <div class="form-group">
+                <label>Buscar por cliente, juego/servicio o teléfono</label>
+                <input type="search" id="recordSearch" placeholder="Escribe para filtrar al instante...">
+            </div>
+            <button type="button" class="btn-small btn-secondary" onclick="loadRecords(true)">Actualizar</button>
+        </div>
+
+        <div class="records-table-wrap">
+            <table class="records-table">
+                <thead>
+                    <tr>
+                        <th>ID</th>
+                        <th>Fecha</th>
+                        <th>Categoría</th>
+                        <th>Subcategoría</th>
+                        <th>Juego/Servicio</th>
+                        <th>Correo Cuenta</th>
+                        <th>Password</th>
+                        <th>Cliente</th>
+                        <th>Teléfono</th>
+                        <th>Monto</th>
+                        <th>Ganancia</th>
+                        <th>Duración</th>
+                        <th>Vencimiento</th>
+                        <th>Acciones</th>
+                    </tr>
+                </thead>
+                <tbody id="recordsTableBody">
+                    <tr>
+                        <td class="empty-row" colspan="14">Abre esta pestaña para cargar la base de datos.</td>
+                    </tr>
+                </tbody>
+            </table>
+        </div>
+        <div id="recordsCompleteList" class="records-complete-list"></div>
+    </div>
+
+    <div id="editModal" class="modal-backdrop">
+        <div class="modal-content">
+            <h3 style="margin-top:0;">Editar Registro</h3>
+            <form id="editForm">
+                <input type="hidden" id="edit_row_id">
+                <div class="modal-grid">
+                    <div class="form-group">
+                        <label>Fecha</label>
+                        <input type="date" id="edit_fecha" required>
+                    </div>
+                    <div class="form-group">
+                        <label>Categoría</label>
+                        <select id="edit_categoria" required>
+                            <option value="PC">PC</option>
+                            <option value="PS4">PS4</option>
+                            <option value="PS5">PS5</option>
+                            <option value="Suscripcion">Suscripción</option>
+                            <option value="Credito">Crédito de Plataforma</option>
+                        </select>
+                    </div>
+                    <div class="form-group">
+                        <label>Subcategoría</label>
+                        <input type="text" id="edit_subcategoria">
+                    </div>
+                    <div class="form-group">
+                        <label>Nombre del Juego o Servicio</label>
+                        <input type="text" id="edit_nombre_item" required>
+                    </div>
+                    <div class="form-group">
+                        <label>Correo Cuenta</label>
+                        <input type="email" id="edit_correo_cuenta">
+                    </div>
+                    <div class="form-group">
+                        <label>Password Cuenta</label>
+                        <input type="text" id="edit_password_cuenta">
+                    </div>
+                    <div class="form-group">
+                        <label>Cliente</label>
+                        <input type="text" id="edit_cliente" required>
+                    </div>
+                    <div class="form-group">
+                        <label>Teléfono</label>
+                        <input type="tel" id="edit_telefono" required>
+                    </div>
+                    <div class="form-group">
+                        <label>Monto</label>
+                        <input type="number" id="edit_monto" step="0.01" required>
+                    </div>
+                    <div class="form-group">
+                        <label>Ganancia</label>
+                        <input type="number" id="edit_ganancia" step="0.01" required>
+                    </div>
+                    <div class="form-group">
+                        <label>Duración</label>
+                        <input type="number" id="edit_duracion">
+                    </div>
+                    <div class="form-group">
+                        <label>Vencimiento</label>
+                        <input type="date" id="edit_vencimiento">
+                    </div>
+                </div>
+                <div class="modal-actions">
+                    <button type="button" class="btn-submit btn-pdf" onclick="closeEditModal()">Cancelar</button>
+                    <button type="submit" class="btn-submit" id="btnEditSubmit">Guardar Cambios</button>
+                </div>
+            </form>
         </div>
     </div>
 </div>
 
 <script>
     // --- 1. PEGA TU URL DE APPS SCRIPT AQUÍ ---
-    const APPS_SCRIPT_URL = "https://script.google.com/macros/s/AKfycbxFacYNdgxB1prHum0D73mtq_rv94e-9ZUbG5HU2ndUhd8NAZ_dK7ZUCaAP8DgSbvcO/exec";
+    const APPS_SCRIPT_URL = "https://script.google.com/macros/s/AKfycbzn9p2tAT55hHJq5jhXOCgGY5sK1v5_t2h9zFQWp3b7V9yxUU1JTB8RBAuPxk0SEns/exec";
     
     // --- LÓGICA DE TEMA (CLARO/OSCURO) ---
     function toggleTheme() {
@@ -388,6 +683,90 @@
     document.getElementById('fecha').valueAsDate = new Date();
 
     let ultimaVenta = {}; 
+    let registros = [];
+
+    const MS_PER_DAY = 1000 * 60 * 60 * 24;
+    const RECORD_FIELDS = [
+        { label: "Fecha", key: "fecha" },
+        { label: "Categoría", key: "categoria" },
+        { label: "Subcategoría", key: "subcategoria" },
+        { label: "Juego/Servicio", key: "nombre_item" },
+        { label: "Correo Cuenta", key: "correo_cuenta" },
+        { label: "Password Cuenta", key: "password_cuenta" },
+        { label: "Cliente", key: "cliente" },
+        { label: "Teléfono", key: "telefono" },
+        { label: "Monto", key: "monto" },
+        { label: "Ganancia", key: "ganancia" },
+        { label: "Duración", key: "duracion" },
+        { label: "Vencimiento", key: "vencimiento" }
+    ];
+
+    function escapeHTML(value) {
+        return String(value ?? "")
+            .replace(/&/g, "&amp;")
+            .replace(/</g, "&lt;")
+            .replace(/>/g, "&gt;")
+            .replace(/"/g, "&quot;")
+            .replace(/'/g, "&#039;");
+    }
+
+    function normalizeText(value) {
+        return String(value ?? "")
+            .toLowerCase()
+            .normalize("NFD")
+            .replace(/[\u0300-\u036f]/g, "");
+    }
+
+    function displayValue(value) {
+        return value === "" || value === null || value === undefined ? "-" : value;
+    }
+
+    function parseDateOnly(value) {
+        if (!value) return null;
+        const cleanValue = String(value).split("T")[0];
+        const parts = cleanValue.split("-").map(Number);
+
+        if (parts.length === 3 && parts[0] > 999 && parts.every(Number.isFinite)) {
+            return new Date(parts[0], parts[1] - 1, parts[2]);
+        }
+
+        const fallback = new Date(value);
+        if (Number.isNaN(fallback.getTime())) return null;
+        return new Date(fallback.getFullYear(), fallback.getMonth(), fallback.getDate());
+    }
+
+    function formatDateInput(date) {
+        const year = date.getFullYear();
+        const month = String(date.getMonth() + 1).padStart(2, "0");
+        const day = String(date.getDate()).padStart(2, "0");
+
+        return `${year}-${month}-${day}`;
+    }
+
+    function addDaysToDateInput(dateValue, days) {
+        const date = parseDateOnly(dateValue);
+        if (!date) return "";
+
+        date.setDate(date.getDate() + Number(days));
+        return formatDateInput(date);
+    }
+
+    function daysUntil(dateValue) {
+        const targetDate = parseDateOnly(dateValue);
+        if (!targetDate) return null;
+
+        const now = new Date();
+        const today = new Date(now.getFullYear(), now.getMonth(), now.getDate());
+        return Math.round((targetDate.getTime() - today.getTime()) / MS_PER_DAY);
+    }
+
+    function postToAppsScript(payload) {
+        return fetch(APPS_SCRIPT_URL, {
+            method: "POST",
+            body: new URLSearchParams(payload),
+            mode: "no-cors"
+        });
+    }
 
     function switchTab(tabId, btnElement) {
         document.querySelectorAll('.panel').forEach(p => p.classList.remove('active'));
@@ -444,9 +823,7 @@
         if (cat === 'Credito') subcategoria = document.getElementById('plataforma_credito').value + " - " + document.getElementById('monto_credito_desc').value;
 
         if (cat === 'Suscripcion' && duracion) {
-            let fechaVenta = new Date(document.getElementById('fecha').value);
-            fechaVenta.setDate(fechaVenta.getDate() + parseInt(duracion));
-            vencimiento = fechaVenta.toISOString().split('T')[0];
+            vencimiento = addDaysToDateInput(document.getElementById('fecha').value, duracion);
         }
 
         ultimaVenta = {
@@ -464,13 +841,9 @@
             vencimiento: vencimiento
         };
 
-        const formData = new URLSearchParams(ultimaVenta);
+        const formData = { action: 'create', ...ultimaVenta };
 
-        fetch(APPS_SCRIPT_URL, {
-            method: 'POST',
-            body: formData,
-            mode: 'no-cors'
-        })
+        postToAppsScript(formData)
         .then(() => {
             document.getElementById('salesForm').style.display = 'none';
             document.getElementById('successModal').style.display = 'block';
@@ -491,76 +864,358 @@
     }
 
     // --- LÓGICA DE PDF ---
-    function descargarPDF() {
+    function loadPdfLogo() {
+        return new Promise(resolve => {
+            const img = new Image();
+            img.onload = () => resolve(img);
+            img.onerror = () => resolve(null);
+            img.src = "logo-oscuro.jpg";
+            if (img.complete) resolve(img);
+        });
+    }
+
+    function sanitizeFileName(value) {
+        return String(value || "cliente")
+            .trim()
+            .replace(/[\\/:*?"<>|]+/g, "-")
+            .replace(/\s+/g, "_");
+    }
+
+    function getSaleValue(key, fallback = "-") {
+        const value = ultimaVenta[key];
+        return value === "" || value === null || value === undefined ? fallback : String(value);
+    }
+
+    async function descargarPDF() {
         const { jsPDF } = window.jspdf;
         const doc = new jsPDF();
-        
-        doc.setFillColor(18, 18, 18);
-        doc.rect(0, 0, 210, 297, 'F');
-        
+        const logo = await loadPdfLogo();
+        const pageWidth = doc.internal.pageSize.getWidth();
+        const margin = 16;
+        const dark = [14, 14, 18];
+        const muted = [105, 111, 122];
+        const border = [225, 229, 235];
+        const softBg = [247, 248, 250];
+        const danger = [225, 57, 57];
+
+        doc.setFillColor(255, 255, 255);
+        doc.rect(0, 0, 210, 297, "F");
+
+        // Encabezado
+        doc.setFillColor(...dark);
+        doc.rect(0, 0, 210, 52, "F");
+
         doc.setTextColor(255, 255, 255);
-        doc.setFontSize(24);
         doc.setFont("helvetica", "bold");
-        doc.text("NexoBox Store", 105, 30, null, null, "center");
-        
-        doc.setFontSize(12);
+        doc.setFontSize(21);
+        doc.text("NexoBox Store", margin, 24);
         doc.setFont("helvetica", "normal");
-        doc.setTextColor(170, 170, 170);
-        doc.text("RECIBO DE COMPRA DIGITAL", 105, 40, null, null, "center");
-        
-        doc.setDrawColor(51, 51, 51);
-        doc.line(20, 50, 190, 50);
+        doc.setFontSize(9);
+        doc.setTextColor(210, 214, 220);
+        doc.text(`Emitido: ${getSaleValue("fecha")}`, margin, 33);
 
-        doc.setTextColor(255, 255, 255);
-        let y = 70;
-        const lineSpacing = 12;
-
-        doc.text(`Fecha de Transacción: ${ultimaVenta.fecha}`, 20, y); y += lineSpacing;
-        doc.text(`Cliente: ${ultimaVenta.cliente}`, 20, y); y += lineSpacing;
-        doc.text(`Teléfono de Contacto: ${ultimaVenta.telefono}`, 20, y); y += lineSpacing;
-        doc.text(`Categoría: ${ultimaVenta.categoria}`, 20, y); y += lineSpacing;
-        
-        if(ultimaVenta.subcategoria !== "N/A") {
-            doc.text(`Detalles del Producto: ${ultimaVenta.subcategoria}`, 20, y); y += lineSpacing;
+        if (logo) {
+            try {
+                const logoW = 42;
+                const logoH = 31;
+                const logoX = pageWidth - margin - logoW;
+                const logoY = 10.5;
+                doc.addImage(logo, "JPEG", logoX, logoY, logoW, logoH);
+            } catch (error) {
+                doc.setFont("helvetica", "bold");
+                doc.setFontSize(12);
+                doc.setTextColor(255, 255, 255);
+                doc.text("NEXOBOX", pageWidth - margin, 28, { align: "right" });
+            }
         }
-        doc.text(`Juego/Servicio: ${ultimaVenta.nombre_item}`, 20, y); y += lineSpacing;
+
+        // Tarjeta principal
+        doc.setFillColor(...softBg);
+        doc.setDrawColor(...border);
+        doc.roundedRect(margin, 64, 178, 44, 5, 5, "FD");
+        doc.setFont("helvetica", "bold");
+        doc.setFontSize(10);
+        doc.setTextColor(...muted);
+        doc.text("CLIENTE", margin + 8, 77);
+        doc.text("CONTACTO", margin + 98, 77);
+
+        doc.setFontSize(15);
+        doc.setTextColor(...dark);
+        doc.text(doc.splitTextToSize(getSaleValue("cliente"), 78), margin + 8, 87);
+        doc.setFontSize(12);
+        doc.text(getSaleValue("telefono"), margin + 98, 87);
+
+        doc.setFont("helvetica", "normal");
+        doc.setFontSize(9);
+        doc.setTextColor(...muted);
+        doc.text("Comprobante generado automaticamente por NexoBox Store.", margin + 8, 101);
+
+        function drawSectionTitle(title, y) {
+            doc.setFont("helvetica", "bold");
+            doc.setFontSize(11);
+            doc.setTextColor(...dark);
+            doc.text(title, margin, y);
+            doc.setDrawColor(...border);
+            doc.line(margin, y + 4, 194, y + 4);
+        }
+
+        function drawInfoCard(label, value, x, y, w, h) {
+            doc.setFillColor(255, 255, 255);
+            doc.setDrawColor(...border);
+            doc.roundedRect(x, y, w, h, 4, 4, "FD");
+            doc.setFont("helvetica", "bold");
+            doc.setFontSize(7.8);
+            doc.setTextColor(...muted);
+            doc.text(label.toUpperCase(), x + 5, y + 8);
+            doc.setFont("helvetica", "normal");
+            doc.setFontSize(10);
+            doc.setTextColor(...dark);
+            doc.text(doc.splitTextToSize(String(value || "-"), w - 10), x + 5, y + 17);
+        }
+
+        drawSectionTitle("Detalle de la compra", 124);
+        drawInfoCard("Categoria", getSaleValue("categoria"), margin, 134, 54, 25);
+        drawInfoCard("Tipo / subcategoria", getSaleValue("subcategoria"), 78, 134, 58, 25);
+        drawInfoCard("Fecha de venta", getSaleValue("fecha"), 140, 134, 54, 25);
+        drawInfoCard("Juego o servicio", getSaleValue("nombre_item"), margin, 164, 116, 28);
+        drawInfoCard("Duracion", getSaleValue("duracion"), 140, 164, 54, 28);
 
         if (ultimaVenta.correo_cuenta || ultimaVenta.password_cuenta) {
-            y += 5;
-            doc.setFont("helvetica", "bold");
-            doc.text("Datos de Acceso:", 20, y); y += lineSpacing;
-            
-            doc.setFont("helvetica", "normal");
-            if (ultimaVenta.correo_cuenta) {
-                doc.text(`Correo: ${ultimaVenta.correo_cuenta}`, 20, y); y += lineSpacing;
-            }
-            if (ultimaVenta.password_cuenta) {
-                doc.text(`Contraseña: ${ultimaVenta.password_cuenta}`, 20, y); y += lineSpacing;
-            }
+            drawSectionTitle("Datos de acceso", 207);
+            drawInfoCard("Correo de la cuenta", getSaleValue("correo_cuenta"), margin, 217, 86, 27);
+            drawInfoCard("Password de la cuenta", getSaleValue("password_cuenta"), 108, 217, 86, 27);
         }
-        
-        doc.setFontSize(16);
+
+        // Resumen monetario
+        doc.setFillColor(...dark);
+        doc.roundedRect(margin, 252, 178, 28, 5, 5, "F");
+        doc.setTextColor(255, 255, 255);
         doc.setFont("helvetica", "bold");
-        y += 10;
-        doc.text(`Total Pagado: ${ultimaVenta.monto}`, 20, y);
-        
-        if(ultimaVenta.vencimiento) {
-            y += 15;
-            doc.setFontSize(12);
-            doc.setTextColor(255, 76, 76);
-            doc.text(`Atención: Este servicio vence el ${ultimaVenta.vencimiento}`, 20, y);
+        doc.setFontSize(10);
+        doc.text("TOTAL PAGADO", margin + 8, 263);
+        doc.setFontSize(18);
+        doc.text(getSaleValue("monto"), margin + 8, 274);
+
+        if (ultimaVenta.vencimiento) {
+            doc.setTextColor(...danger);
+            doc.setFont("helvetica", "bold");
+            doc.setFontSize(10);
+            doc.text(`Vencimiento: ${getSaleValue("vencimiento")}`, 194 - 8, 274, { align: "right" });
         }
 
-        doc.setFontSize(10);
         doc.setFont("helvetica", "italic");
-        doc.setTextColor(170, 170, 170);
-        doc.text("Este documento no es una factura oficial y no tiene valor legal.", 105, 268, null, null, "center");
-
+        doc.setFontSize(8);
+        doc.setTextColor(...muted);
+        doc.text("Este documento no es una factura oficial y no tiene valor legal.", 105, 288, { align: "center" });
         doc.setFont("helvetica", "normal");
-        doc.setTextColor(100, 100, 100);
-        doc.text("¡Gracias por tu preferencia! Soporte y garantías en NexoBox Store.", 105, 280, null, null, "center");
+        doc.text("Gracias por tu preferencia. Soporte y garantias en NexoBox Store.", 105, 293, { align: "center" });
 
-        doc.save(`NexoBox_${ultimaVenta.cliente}_${ultimaVenta.fecha}.pdf`);
+        doc.save(`NexoBox_${sanitizeFileName(ultimaVenta.cliente)}_${getSaleValue("fecha", "sin_fecha")}.pdf`);
+    }
+
+    // --- CRUD Y BUSCADOR DE BASE DE DATOS ---
+    function normalizeRecord(record) {
+        return {
+            id: record.id || record.rowId || record.rowIndex || "",
+            fecha: record.fecha || "",
+            categoria: record.categoria || "",
+            subcategoria: record.subcategoria || "",
+            nombre_item: record.nombre_item || record.servicio || "",
+            correo_cuenta: record.correo_cuenta || "",
+            password_cuenta: record.password_cuenta || "",
+            cliente: record.cliente || "",
+            telefono: record.telefono || "",
+            monto: record.monto || "",
+            ganancia: record.ganancia || "",
+            duracion: record.duracion || "",
+            vencimiento: record.vencimiento || ""
+        };
+    }
+
+    function loadRecords(force = false) {
+        const tbody = document.getElementById('recordsTableBody');
+        const completeList = document.getElementById('recordsCompleteList');
+        const searchInput = document.getElementById('recordSearch');
+
+        if (!force) {
+            searchInput.value = "";
+        }
+
+        tbody.innerHTML = "<tr><td class='empty-row' colspan='14'>Cargando registros...</td></tr>";
+        completeList.innerHTML = "";
+
+        fetch(`${APPS_SCRIPT_URL}?action=list&cache=${Date.now()}`)
+            .then(response => response.json())
+            .then(data => {
+                const rawRecords = Array.isArray(data) ? data : (data.records || []);
+                registros = rawRecords.map(normalizeRecord);
+                renderRecordsTable();
+            })
+            .catch(err => {
+                tbody.innerHTML = "<tr><td class='empty-row' colspan='14' style='color: var(--alert-red);'>Error al cargar la base de datos.</td></tr>";
+                completeList.innerHTML = "";
+            });
+    }
+
+    function renderRecordsTable() {
+        const tbody = document.getElementById('recordsTableBody');
+        const completeList = document.getElementById('recordsCompleteList');
+
+        if (registros.length === 0) {
+            tbody.innerHTML = "<tr><td class='empty-row' colspan='14'>No hay registros guardados.</td></tr>";
+            completeList.innerHTML = "";
+            return;
+        }
+
+        tbody.innerHTML = registros.map(record => {
+            const searchText = normalizeText(`${record.cliente} ${record.nombre_item} ${record.telefono}`);
+
+            return `
+                <tr data-search="${escapeHTML(searchText)}">
+                    <td>${escapeHTML(record.id)}</td>
+                    <td>${escapeHTML(record.fecha)}</td>
+                    <td>${escapeHTML(record.categoria)}</td>
+                    <td>${escapeHTML(record.subcategoria)}</td>
+                    <td>${escapeHTML(record.nombre_item)}</td>
+                    <td>${escapeHTML(record.correo_cuenta)}</td>
+                    <td>${escapeHTML(record.password_cuenta)}</td>
+                    <td>${escapeHTML(record.cliente)}</td>
+                    <td>${escapeHTML(record.telefono)}</td>
+                    <td>${escapeHTML(record.monto)}</td>
+                    <td>${escapeHTML(record.ganancia)}</td>
+                    <td>${escapeHTML(record.duracion)}</td>
+                    <td>${escapeHTML(record.vencimiento)}</td>
+                    <td class="record-actions">
+                        <button type="button" class="btn-small btn-secondary" onclick="openEditModal('${escapeHTML(record.id)}')">Editar</button>
+                        <button type="button" class="btn-small btn-danger" onclick="deleteRecord('${escapeHTML(record.id)}')">Eliminar</button>
+                    </td>
+                </tr>
+            `;
+        }).join("");
+
+        renderRecordsCompleteList();
+        filterRecordRows();
+    }
+
+    function renderRecordsCompleteList() {
+        const completeList = document.getElementById('recordsCompleteList');
+
+        completeList.innerHTML = registros.map(record => {
+            const searchText = normalizeText(`${record.cliente} ${record.nombre_item} ${record.telefono}`);
+            const detailItems = RECORD_FIELDS.map(field => `
+                <div class="record-detail-item">
+                    <span class="record-detail-label">${field.label}</span>
+                    <span class="record-detail-value">${escapeHTML(displayValue(record[field.key]))}</span>
+                </div>
+            `).join("");
+
+            return `
+                <article class="record-card" data-search="${escapeHTML(searchText)}">
+                    <div class="record-card-header">
+                        <h4 class="record-card-title">ID ${escapeHTML(record.id)} - ${escapeHTML(displayValue(record.cliente))}</h4>
+                        <div class="record-actions">
+                            <button type="button" class="btn-small btn-secondary" onclick="openEditModal('${escapeHTML(record.id)}')">Editar</button>
+                            <button type="button" class="btn-small btn-danger" onclick="deleteRecord('${escapeHTML(record.id)}')">Eliminar</button>
+                        </div>
+                    </div>
+                    <div class="record-detail-grid">
+                        ${detailItems}
+                    </div>
+                </article>
+            `;
+        }).join("");
+    }
+
+    function filterRecordRows() {
+        const term = normalizeText(document.getElementById('recordSearch').value);
+        document.querySelectorAll('#recordsTableBody tr[data-search]').forEach(row => {
+            row.style.display = row.dataset.search.includes(term) ? "" : "none";
+        });
+        document.querySelectorAll('#recordsCompleteList .record-card[data-search]').forEach(card => {
+            card.style.display = card.dataset.search.includes(term) ? "" : "none";
+        });
+    }
+
+    function openEditModal(rowId) {
+        const record = registros.find(item => String(item.id) === String(rowId));
+        if (!record) {
+            alert("No se encontró el registro seleccionado. Actualiza la tabla e intenta de nuevo.");
+            return;
+        }
+
+        document.getElementById('edit_row_id').value = record.id;
+        document.getElementById('edit_fecha').value = record.fecha;
+        document.getElementById('edit_categoria').value = record.categoria || "PC";
+        document.getElementById('edit_subcategoria').value = record.subcategoria;
+        document.getElementById('edit_nombre_item').value = record.nombre_item;
+        document.getElementById('edit_correo_cuenta').value = record.correo_cuenta;
+        document.getElementById('edit_password_cuenta').value = record.password_cuenta;
+        document.getElementById('edit_cliente').value = record.cliente;
+        document.getElementById('edit_telefono').value = record.telefono;
+        document.getElementById('edit_monto').value = record.monto;
+        document.getElementById('edit_ganancia').value = record.ganancia;
+        document.getElementById('edit_duracion').value = record.duracion;
+        document.getElementById('edit_vencimiento').value = record.vencimiento;
+        document.getElementById('editModal').classList.add('active');
+    }
+
+    function closeEditModal() {
+        document.getElementById('editModal').classList.remove('active');
+        document.getElementById('editForm').reset();
+    }
+
+    document.getElementById('recordSearch').addEventListener('input', filterRecordRows);
+    document.getElementById('editModal').addEventListener('click', function(e) {
+        if (e.target === this) closeEditModal();
+    });
+
+    document.getElementById('editForm').addEventListener('submit', function(e) {
+        e.preventDefault();
+
+        const btn = document.getElementById('btnEditSubmit');
+        btn.innerText = "Guardando...";
+        btn.disabled = true;
+
+        const payload = {
+            action: "update",
+            rowId: document.getElementById('edit_row_id').value,
+            fecha: document.getElementById('edit_fecha').value,
+            categoria: document.getElementById('edit_categoria').value,
+            subcategoria: document.getElementById('edit_subcategoria').value,
+            nombre_item: document.getElementById('edit_nombre_item').value,
+            correo_cuenta: document.getElementById('edit_correo_cuenta').value,
+            password_cuenta: document.getElementById('edit_password_cuenta').value,
+            cliente: document.getElementById('edit_cliente').value,
+            telefono: document.getElementById('edit_telefono').value,
+            monto: document.getElementById('edit_monto').value,
+            ganancia: document.getElementById('edit_ganancia').value,
+            duracion: document.getElementById('edit_duracion').value,
+            vencimiento: document.getElementById('edit_vencimiento').value
+        };
+
+        postToAppsScript(payload)
+            .then(() => {
+                closeEditModal();
+                setTimeout(() => loadRecords(true), 700);
+            })
+            .catch(err => alert("Error al guardar los cambios."))
+            .finally(() => {
+                btn.innerText = "Guardar Cambios";
+                btn.disabled = false;
+            });
+    });
+
+    function deleteRecord(rowId) {
+        const record = registros.find(item => String(item.id) === String(rowId));
+        const label = record ? `${record.cliente} - ${record.nombre_item}` : `ID ${rowId}`;
+
+        if (!confirm(`¿Eliminar el registro ${label}? Esta acción borrará la fila ${rowId} de Google Sheets.`)) {
+            return;
+        }
+
+        postToAppsScript({ action: "delete", rowId: rowId })
+            .then(() => setTimeout(() => loadRecords(true), 700))
+            .catch(err => alert("Error al eliminar el registro."));
     }
 
     // --- LÓGICA DE ALERTAS DESDE GOOGLE SHEETS ---
@@ -568,28 +1223,35 @@
         const container = document.getElementById('alertsContainer');
         container.innerHTML = "<p style='color: var(--text-muted); text-align: center;'>Cargando base de datos...</p>";
 
-        fetch(APPS_SCRIPT_URL)
+        fetch(`${APPS_SCRIPT_URL}?action=alerts&cache=${Date.now()}`)
             .then(response => response.json())
-            .then(subs => {
+            .then(data => {
+                const subs = Array.isArray(data) ? data : (data.alerts || data.records || []);
                 container.innerHTML = "";
-                let hoy = new Date();
                 let encontradas = 0;
 
                 subs.forEach(sub => {
-                    let fechaVenc = new Date(sub.vencimiento);
-                    fechaVenc.setMinutes(fechaVenc.getMinutes() + fechaVenc.getTimezoneOffset());
-                    
-                    let difTiempo = fechaVenc.getTime() - hoy.getTime();
-                    let difDias = Math.ceil(difTiempo / (1000 * 3600 * 24));
+                    const difDias = daysUntil(sub.vencimiento);
+                    if (difDias === null) return;
 
-                    if (difDias <= 5 && difDias >= -30) {
+                    if (difDias <= 5 && difDias >= -2) {
                         encontradas++;
-                        let estado = difDias < 0 ? `¡Venció hace ${Math.abs(difDias)} días!` : `Vence en ${difDias} días`;
+                        const diasAtraso = Math.abs(difDias);
+                        let estado = `Vence en ${difDias} días`;
+                        if (difDias === 0) estado = "Vence hoy";
+                        if (difDias < 0) estado = `¡Venció hace ${diasAtraso} ${diasAtraso === 1 ? "día" : "días"}!`;
+
+                        const cliente = escapeHTML(sub.cliente);
+                        const servicio = escapeHTML(sub.servicio || sub.nombre_item || "");
+                        const telefono = escapeHTML(sub.telefono);
+                        const vencimiento = escapeHTML(sub.vencimiento);
+                        const telefonoWhatsApp = String(sub.telefono || "").replace(/\D/g, "");
+
                         container.innerHTML += `
                             <div class="alert-card">
-                                <h4>${sub.cliente} - ${sub.servicio}</h4>
-                                <p>Tel: ${sub.telefono} | <strong>${estado}</strong> (Caducidad: ${sub.vencimiento})</p>
-                                <a href="https://wa.me/591${sub.telefono}" class="whatsapp-link" target="_blank">Enviar recordatorio por WhatsApp -></a>
+                                <h4>${cliente} - ${servicio}</h4>
+                                <p>Tel: ${telefono} | <strong>${estado}</strong> (Caducidad: ${vencimiento})</p>
+                                <a href="https://wa.me/591${telefonoWhatsApp}" class="whatsapp-link" target="_blank">Enviar recordatorio por WhatsApp -></a>
                             </div>
                         `;
                     }
